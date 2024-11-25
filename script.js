@@ -1,170 +1,163 @@
 window.onload = () => {
-    function crearTarjetas(filosofos) {
-        filosofos.forEach((filosofo) => {
-            // Creamos tarjeta vacía
-            let tarjeta = document.createElement('div');
-            tarjeta.classList.add('card');
-            
-            // Creamos imagen
-            let imagen = document.createElement('img');
-            imagen.src = filosofo.imagen;
-            imagen.alt = `Foto de ${filosofo.nombre}`;
-            imagen.classList.add('photo');
-            tarjeta.append(imagen);
-        
-            // Creamos caja de información
-            let info = document.createElement('div');
-            info.classList.add('card-info');
-            tarjeta.append(info);
-        
-            // Creamos título
-            let titulo = document.createElement('h3');
-            titulo.classList.add('nombre');
-            titulo.innerHTML = filosofo.nombre;
-            info.append(titulo);
-        
-            // Creamos fila de información (info-row)
-            let filaInfo = document.createElement('div');
-            filaInfo.classList.add('info-row');
-            info.append(filaInfo);
-        
-            // Añadimos info del país a filaInfo
-            let paisInfo = document.createElement('div');
-            paisInfo.classList.add('info-pais');
-            
-            let paisImagen = document.createElement('img');
-            paisImagen.src = filosofo.pais.bandera;
-            paisImagen.alt = `Bandera de ${filosofo.pais.nombre}`;
-            paisInfo.append(paisImagen);
-        
-            let paisNombre = document.createElement('span');
-            paisNombre.classList.add('pais');
-            paisNombre.textContent = filosofo.pais.nombre;
-            paisInfo.append(paisNombre);
-            
-            filaInfo.append(paisInfo);
-        
-            // Añadimos info de la corriente a filaInfo
-            let corrienteInfo = document.createElement('div');
-            corrienteInfo.classList.add('info-corriente');
-        
-            let corrienteLabel = document.createElement('span');
-            corrienteLabel.textContent = 'Corriente: ';
-            corrienteInfo.append(corrienteLabel);
-        
-            let corriente = document.createElement('span');
-            corriente.classList.add('corriente');
-            corriente.textContent = filosofo.corriente;
-            corrienteInfo.append(corriente);
-        
-            filaInfo.append(corrienteInfo);
-        
-            // Añadimos info del arma a filaInfo
-            let armaInfo = document.createElement('div');
-            armaInfo.classList.add('info-arma');
-        
-            let armaLabel = document.createElement('span');
-            armaLabel.textContent = 'Arma: ';
-            armaInfo.append(armaLabel);
-        
-            let arma = document.createElement('span');
-            arma.classList.add('arma');
-            arma.textContent = filosofo.arma;
-            armaInfo.append(arma);
-        
-            filaInfo.append(armaInfo);
-        
-            // Añadimos caja de habilidades
-            let habilidades = document.createElement('div');
-            habilidades.classList.add('skills');
-            info.append(habilidades);
-        
-            // Añadimos una a una las habilidades
-            for (let infoHabilidad of filosofo.habilidades) {
-                let habilidad = document.createElement('div');
-                habilidad.classList.add('skill');
-                habilidades.append(habilidad);
-            
-                // let icono = document.createElement('img');
-                // // icono.src = infoHabilidad.icono; // Asegúrate de que `icono` esté definido en `infoHabilidad`.
-                // icono.alt = `Icono de ${infoHabilidad.habilidad}`;
-                // habilidad.append(icono);
-            
-                let etiqueta = document.createElement('span');
-                etiqueta.classList.add('skill-name');
-                etiqueta.textContent = infoHabilidad.habilidad;
-                habilidad.append(etiqueta);
-            
-                let barraNivel = document.createElement('div');
-                barraNivel.classList.add('skill-bar');
-                habilidad.append(barraNivel); 
-            
-                let nivel = document.createElement('div');
-                nivel.classList.add('level');
-                nivel.style.width = `${infoHabilidad.nivel * 25}%`; 
-                barraNivel.append(nivel);
-            }
-        
-            // Creamos el botón de eliminar
-            let botonX = document.createElement('div');
-            botonX.innerHTML = "&#x2716"; 
-            botonX.classList.add('botonEliminar'); 
-            botonX.addEventListener('click', eliminarTarjeta); 
-
-            // Añadimos el botón a la tarjeta
-            tarjeta.append(botonX);
-
-
-            // Añadimos tarjeta creada al contenedor de tarjetas
-            let contenedor = document.querySelector('.cards-container');
-            contenedor.append(tarjeta);
-        });
-        
-    }
-    crearTarjetas(filosofos)
+    // Llamar a la función para crear las tarjetas
+    crearTarjetas(filosofos);
 
     // Crear handlers para los botones de control
     let botonCrearTarjeta = document.querySelector('.create-btn');
-    // botonCrearTarjeta.addEventListener('click',crearNuevaTarjeta);
-}
+    botonCrearTarjeta.addEventListener('click', crearNuevaTarjeta);
+};
 
-
-
-function eliminarTarjeta(event) {
-        const boton = event.target;
-        boton.parentElement.remove();
-}
-
-function ordenarNombreAZ() {
-    let tarjetas = Array.from(document.querySelectorAll('.card'));
-    let tarjetasOrdenadas = tarjetas.sort((tarjetaA, tarjetaB) => {
-        let nombre1 = tarjetaA.querySelector('h3').innerHTML;
-        let nombre2 = tarjetaB.querySelector('h3').innerHTML;
-        return nombre1.localeCompare(nombre2);
-    });
-
-    // Eliminar totes les targetes de l'array 'tarjeta'
-    // Completar codi
-
-    // Afegir 'tarjetasOrdenadas' al contenidor de cards
+// Crear tarjetas en base al array de filósofos
+function crearTarjetas(filosofos) {
     let contenedor = document.querySelector('.cards-container');
-    // Completar codi
+
+    filosofos.forEach((filosofo) => {
+        // Crear tarjeta y los elementos de la tarjeta
+        let tarjeta = document.createElement('div');
+        tarjeta.classList.add('card');
+        
+        let imagen = document.createElement('img');
+        imagen.src = filosofo.imagen;
+        imagen.alt = `Foto de ${filosofo.nombre}`;
+        imagen.classList.add('photo');
+        tarjeta.append(imagen);
+
+        let info = document.createElement('div');
+        info.classList.add('card-info');
+        tarjeta.append(info);
+
+        let titulo = document.createElement('h3');
+        titulo.classList.add('nombre');
+        titulo.innerHTML = filosofo.nombre;
+        info.append(titulo);
+
+        // Añadir la información adicional (país, corriente, habilidades, etc.)
+        let filaInfo = document.createElement('div'); 
+        filaInfo.classList.add('info-row');
+        info.append(filaInfo);
+
+        // País
+        let paisInfo = document.createElement('div');
+        paisInfo.classList.add('info-pais');
+        let paisImagen = document.createElement('img');
+        paisImagen.src = filosofo.pais.bandera;
+        paisImagen.alt = `Bandera de ${filosofo.pais.nombre}`;
+        paisInfo.append(paisImagen);
+        let paisNombre = document.createElement('span');
+        paisNombre.classList.add('pais');
+        paisNombre.textContent = filosofo.pais.nombre;
+        paisInfo.append(paisNombre);
+        filaInfo.append(paisInfo);
+
+        // Corriente
+        let corrienteInfo = document.createElement('div');
+        corrienteInfo.classList.add('info-corriente');
+        let corrienteLabel = document.createElement('span');
+        corrienteLabel.textContent = 'Corriente: ';
+        corrienteInfo.append(corrienteLabel);
+        let corriente = document.createElement('span');
+        corriente.classList.add('corriente');
+        corriente.textContent = filosofo.corriente;
+        corrienteInfo.append(corriente);
+        filaInfo.append(corrienteInfo);
+
+        // Arma
+        let armaInfo = document.createElement('div');
+        armaInfo.classList.add('info-arma');
+        let armaLabel = document.createElement('span');
+        armaLabel.textContent = 'Arma: ';
+        armaInfo.append(armaLabel);
+        let arma = document.createElement('span');
+        arma.classList.add('arma');
+        arma.textContent = filosofo.arma;
+        armaInfo.append(arma);
+        filaInfo.append(armaInfo);
+
+        // Habilidades
+        let habilidades = document.createElement('div');
+        habilidades.classList.add('skills');
+        info.append(habilidades);
+        for (let infoHabilidad of filosofo.habilidades) {
+            let habilidad = document.createElement('div');
+            habilidad.classList.add('skill');
+            habilidades.append(habilidad);
+
+            let etiqueta = document.createElement('span');
+            etiqueta.classList.add('skill-name');
+            etiqueta.textContent = infoHabilidad.habilidad;
+            habilidad.append(etiqueta);
+
+            let barraNivel = document.createElement('div');
+            barraNivel.classList.add('skill-bar');
+            habilidad.append(barraNivel);
+
+            let nivel = document.createElement('div');
+            nivel.classList.add('level');
+            nivel.style.width = `${infoHabilidad.nivel * 25}%`;
+            barraNivel.append(nivel);
+        }
+
+        // Botón de eliminar
+        let botonX = document.createElement('div');
+        botonX.innerHTML = "&#x2716";
+        botonX.classList.add('botonEliminar');
+        botonX.addEventListener('click', eliminarTarjeta);
+        tarjeta.append(botonX);
+
+        // Añadir la tarjeta al contenedor (agregar al final)
+        contenedor.append(tarjeta);
+    });
 }
 
-function ordenarNombreZA() {
+// Eliminar tarjeta
+function eliminarTarjeta(event) {
+    const boton = event.target;
+    boton.parentElement.remove();
 }
 
+// Crear nueva tarjeta
 function crearNuevaTarjeta(event) {
     event.preventDefault();
-    let nuevoFilosofo = {};
-    nuevoFilosofo.nombre = document.querySelector('.create-card-form .nombre').value;
-    nuevoFilosofo.imagen = document.querySelector('.create-card-form .foto').value;
-    nuevoFilosofo.pais = {};
-    nuevoFilosofo.pais.nombre = document.querySelector('.create-card-form .pais').value;
-    // Completar la función
 
-    // crearTarjetas(nuevoFilosofo);
+    let nuevoFilosofo = {
+        nombre: document.querySelector('#name').value,
+        imagen: document.querySelector('#image').value,
+        pais: { nombre: document.querySelector('#country').value, bandera: document.querySelector('#flag').value },
+        corriente: document.querySelector('#philosophy').value,
+        arma: document.querySelector('#weapon').value,
+        habilidades: [
+            { habilidad: "Habilidad 1", nivel: document.querySelector('#skill1').value },
+            { habilidad: "Habilidad 2", nivel: document.querySelector('#skill2').value },
+            { habilidad: "Habilidad 3", nivel: document.querySelector('#skill3').value },
+            { habilidad: "Habilidad 4", nivel: document.querySelector('#skill4').value }
+        ]
+    };
+
+    // Asignar los valores del formulario al objeto nuevoFilosofo
+    nuevoFilosofo.nombre = document.querySelector('#name').value ;
+    nuevoFilosofo.imagen = document.querySelector('#image').value;
+    nuevoFilosofo.pais.nombre = document.querySelector('#country').value;
+    nuevoFilosofo.pais.bandera = document.querySelector('#flag').value;
+    nuevoFilosofo.corriente = document.querySelector('#philosophy').value;
+    nuevoFilosofo.arma = document.querySelector('#weapon').value;
+
+    // Habilidades
+    nuevoFilosofo.habilidades = [
+        { habilidad: "Sabiduría", nivel: document.querySelector('#skill1').value},
+        { habilidad: "Oratoria", nivel: document.querySelector('#skill2').value},
+        { habilidad: "Lógica", nivel: document.querySelector('#skill3').value},
+        { habilidad: "Innovación", nivel: document.querySelector('#skill4').value}
+    ];
+
+    filosofos.push(nuevoFilosofo);
+
+    // Crear las tarjetas con el nuevo filósofo (solo agregar la nueva tarjeta)
+    crearTarjetas([nuevoFilosofo]);
+
+    // Limpiar los campos del formulario después de crear la tarjeta
+    document.querySelector('form').reset();
 }
+
 
 function parsearTarjetas(tarjetas){
     let filosofosParseados = [];
