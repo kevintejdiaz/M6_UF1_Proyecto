@@ -5,6 +5,8 @@ window.onload = () => {
     // Crear handlers para los botones de control
     let botonCrearTarjeta = document.querySelector('.create-btn');
     botonCrearTarjeta.addEventListener('click', crearNuevaTarjeta);
+    document.getElementById('ordenarAZ').addEventListener('click', ordenarNombreAZ);
+    document.getElementById('ordenarZA').addEventListener('click', ordenarNombreZA);
 };
 
 // Crear tarjetas en base al array de filósofos
@@ -115,6 +117,38 @@ function eliminarTarjeta(event) {
     boton.parentElement.remove();
 }
 
+function ordenarNombreAZ() {
+    let tarjetas = Array.from(document.querySelectorAll('.card'));
+    let tarjetasOrdenadas = tarjetas.sort((tarjetaA, tarjetaB) => {
+        let nombre1 = tarjetaA.querySelector('h3.nombre').innerText;
+        let nombre2 = tarjetaB.querySelector('h3.nombre').innerText;
+        return nombre1.localeCompare(nombre2);
+    });
+
+    // Eliminar todas las tarjetas del contenedor
+    let contenedor = document.querySelector('.cards-container');
+    contenedor.innerHTML = '';
+
+    // Añadir las tarjetas ordenadas al contenedor
+    tarjetasOrdenadas.forEach(tarjeta => contenedor.append(tarjeta));
+}
+
+function ordenarNombreZA() {
+    let tarjetas = Array.from(document.querySelectorAll('.card'));
+    let tarjetasOrdenadas = tarjetas.sort((tarjetaA, tarjetaB) => {
+        let nombre1 = tarjetaA.querySelector('h3.nombre').innerText;
+        let nombre2 = tarjetaB.querySelector('h3.nombre').innerText;
+        return nombre2.localeCompare(nombre1);  // Cambio en el orden
+    });
+
+    // Eliminar todas las tarjetas del contenedor
+    let contenedor = document.querySelector('.cards-container');
+    contenedor.innerHTML = '';
+
+    // Añadir las tarjetas ordenadas al contenedor
+    tarjetasOrdenadas.forEach(tarjeta => contenedor.appendChild(tarjeta));
+}
+
 // Crear nueva tarjeta
 function crearNuevaTarjeta(event) {
     event.preventDefault();
@@ -157,6 +191,8 @@ function crearNuevaTarjeta(event) {
     // Limpiar los campos del formulario después de crear la tarjeta
     document.querySelector('form').reset();
 }
+
+
 
 
 function parsearTarjetas(tarjetas){
