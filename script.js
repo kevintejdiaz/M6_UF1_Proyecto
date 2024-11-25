@@ -7,6 +7,8 @@ window.onload = () => {
     botonCrearTarjeta.addEventListener('click', crearNuevaTarjeta);
     document.getElementById('ordenarAZ').addEventListener('click', ordenarNombreAZ);
     document.getElementById('ordenarZA').addEventListener('click', ordenarNombreZA);
+    document.querySelector('.save-btn').addEventListener('click', guardarTarjetas);
+    document.querySelector('.load-btn').addEventListener('click', cargarTarjetas);
 };
 
 // Crear tarjetas en base al array de filósofos
@@ -195,23 +197,36 @@ function crearNuevaTarjeta(event) {
 
 
 
-function parsearTarjetas(tarjetas){
-    let filosofosParseados = [];
-    for (let tarjeta of tarjetas){
-        let filosofo = {};
+function parsearTarjetas(tarjetas) {
+    let filosofosParseados = [];  // Inicialitzem l'array que emmagatzemarà els objectes
+
+    for (let tarjeta of tarjetas) {
+        let filosofo = {};  // Creem un objecte per cada filòsofo
+
+        // Assignem les propietats de l'objecte filosofo amb els valors extrets del DOM
         filosofo.nombre = tarjeta.querySelector('.nombre').innerHTML;
         filosofo.imagen = tarjeta.querySelector('.photo').src;
         filosofo.pais = {};
-        // Completar funció
-        
+        filosofo.pais.nombre = tarjeta.querySelector('.pais').innerHTML;
+        filosofo.bandera = tarjeta.querySelector('.info-pais img').src;
+        filosofo.corriente = tarjeta.querySelector('.corriente').innerHTML;
+        filosofo.arma = tarjeta.querySelector('.arma').innerHTML;
+
+        // Recollim les habilitats de la targeta
         let habilidades = tarjeta.querySelectorAll('.skill');
-        for (let habilidad of habilidades){
+        filosofo.habilidades = [];  // Inicialitzem l'array per a les habilitats
+
+        for (let habilidad of habilidades) {
             let habilidadParaGuardar = {};
-            // Completar funció
+            habilidadParaGuardar.nombre = habilidad.querySelector('.skill-name').innerHTML;
+            habilidadParaGuardar.nivel = habilidad.querySelector('.level').style.width;
+            filosofo.habilidades.push(habilidadParaGuardar);  // Afegim l'habilitat a l'array
         }
-        filosofosParseados.push(filosofo);
+
+        filosofosParseados.push(filosofo);  // Afegim el filòsofo a la llista
     }
-    return filosofosParseados;
+
+    return filosofosParseados;  // Retornem l'array amb tots els filòsofs
 }
 
 function guardarTarjetas(){
@@ -219,8 +234,119 @@ function guardarTarjetas(){
     localStorage.setItem('tarjetas',JSON.stringify(parsearTarjetas(tarjetas)));
 }
 
+function crearTarjetaHTML(filosofo) {
+    const card = document.createElement('div');
+    card.classList.add('card');
+
+    // Imagen
+    const imagen = document.createElement('img');
+    imagen.src = filosofo.imagen;
+    imagen.alt = `Foto de ${filosofo.nombre}`;
+    imagen.classList.add('photo');
+    card.append(imagen);
+
+    // Contenedor de información
+    const info = document.createElement('div');
+    info.classList.add('card-info');
+    card.append(info);
+
+    // Nombre
+    const titulo = document.createElement('h3');
+    titulo.classList.add('nombre');
+    titulo.textContent = filosofo.nombre;
+    info.append(titulo);
+
+    // Información adicional (país, corriente, arma)
+    const filaInfo = document.createElement('div');
+    filaInfo.classList.add('info-row');
+    info.append(filaInfo);
+
+    // País
+    const paisInfo = document.createElement('div');
+    paisInfo.classList.add('info-pais');
+    const paisImagen = document.createElement('img');
+    paisImagen.src = filosofo.bandera;
+    paisImagen.alt = `Bandera de ${filosofo.pais.nombre}`;
+    paisInfo.append(paisImagen);
+    const paisNombre = document.createElement('span');
+    paisNombre.classList.add('pais');
+    paisNombre.textContent = filosofo.pais.nombre;
+    paisInfo.append(paisNombre);
+    filaInfo.append(paisInfo);
+
+    // Corriente
+    const corrienteInfo = document.createElement('div');
+    corrienteInfo.classList.add('info-corriente');
+    const corrienteLabel = document.createElement('span');
+    corrienteLabel.textContent = 'Corriente: ';
+    corrienteInfo.append(corrienteLabel);
+    const corriente = document.createElement('span');
+    corriente.classList.add('corriente');
+    corriente.textContent = filosofo.corriente;
+    corrienteInfo.append(corriente);
+    filaInfo.append(corrienteInfo);
+
+    // Arma
+    const armaInfo = document.createElement('div');
+    armaInfo.classList.add('info-arma');
+    const armaLabel = document.createElement('span');
+    armaLabel.textContent = 'Arma: ';
+    armaInfo.append(armaLabel);
+    const arma = document.createElement('span');
+    arma.classList.add('arma');
+    arma.textContent = filosofo.arma;
+    armaInfo.append(arma);
+    filaInfo.append(armaInfo);
+
+    // Habilidades
+    const habilidades = document.createElement('div');
+    habilidades.classList.add('skills');
+    info.append(habilidades);
+    filosofo.habilidades.forEach((habilidad) => {
+        const skillDiv = document.createElement('div');
+        skillDiv.classList.add('skill');
+        habilidades.append(skillDiv);
+
+        const skillName = document.createElement('span');
+        skillName.classList.add('skill-name');
+        skillName.textContent = habilidad.nombre;
+        skillDiv.append(skillName);
+
+        const skillBar = document.createElement('div');
+        skillBar.classList.add('skill-bar');
+        skillDiv.append(skillBar);
+
+        const level = document.createElement('div');
+        level.classList.add('level');
+        level.style.width = habilidad.nivel;
+        skillBar.append(level);
+    });
+
+    // Botón de eliminar
+    const botonX = document.createElement('div');
+    botonX.innerHTML = "&#x2716"; // Icono de eliminar
+    botonX.classList.add('botonEliminar');
+    botonX.addEventListener('click', () => {
+        card.remove();
+    });
+    card.append(botonX);
+
+    // Añadir la tarjeta al contenedor
+    document.querySelector('.cards-container').append(card);
+}
+
 
 function cargarTarjetas() {
+    // Recuperem les targetes emmagatzemades al localStorage
+    let tarjetasGuardadas = JSON.parse(localStorage.getItem('tarjetas'));
+
+    // Si hi ha targetes desades, les mostrem
+    if (tarjetasGuardadas) {
+        // Suponem que ja tenim una funció que converteix les targetes a HTML (com una funció que genera les targetes)
+        tarjetasGuardadas.forEach(filosofo => {
+            crearTarjetaHTML(filosofo);
+        });
+    }
 }
 
 const filosofos = [
