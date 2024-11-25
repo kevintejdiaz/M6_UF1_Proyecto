@@ -84,32 +84,37 @@ window.onload = () => {
                 let habilidad = document.createElement('div');
                 habilidad.classList.add('skill');
                 habilidades.append(habilidad);
-        
+            
                 // let icono = document.createElement('img');
                 // // icono.src = infoHabilidad.icono; // Asegúrate de que `icono` esté definido en `infoHabilidad`.
                 // icono.alt = `Icono de ${infoHabilidad.habilidad}`;
                 // habilidad.append(icono);
-        
+            
                 let etiqueta = document.createElement('span');
                 etiqueta.classList.add('skill-name');
                 etiqueta.textContent = infoHabilidad.habilidad;
                 habilidad.append(etiqueta);
-        
+            
                 let barraNivel = document.createElement('div');
                 barraNivel.classList.add('skill-bar');
-                habilidad.append(barraNivel);
-        
-
+                habilidad.append(barraNivel); 
+            
                 let nivel = document.createElement('div');
                 nivel.classList.add('level');
-                nivel.style.width = `${infoHabilidad.nivel * 25}%`; // Suponiendo que nivel es de 1 a 4, ajustamos el ancho proporcionalmente.
+                nivel.style.width = `${infoHabilidad.nivel * 25}%`; 
                 barraNivel.append(nivel);
-
-
-                habilidad.append(barraNivel);
-                habilidades.append(habilidad);
             }
         
+            // Creamos el botón de eliminar
+            let botonX = document.createElement('div');
+            botonX.innerHTML = "&#x2716"; 
+            botonX.classList.add('botonEliminar'); 
+            botonX.addEventListener('click', eliminarTarjeta); 
+
+            // Añadimos el botón a la tarjeta
+            tarjeta.append(botonX);
+
+
             // Añadimos tarjeta creada al contenedor de tarjetas
             let contenedor = document.querySelector('.cards-container');
             contenedor.append(tarjeta);
@@ -120,12 +125,14 @@ window.onload = () => {
 
     // Crear handlers para los botones de control
     let botonCrearTarjeta = document.querySelector('.create-btn');
-    botonCrearTarjeta.addEventListener('click',crearNuevaTarjeta);
+    // botonCrearTarjeta.addEventListener('click',crearNuevaTarjeta);
 }
 
 
 
-function eliminarTarjeta() {
+function eliminarTarjeta(event) {
+        const boton = event.target;
+        boton.parentElement.remove();
 }
 
 function ordenarNombreAZ() {
